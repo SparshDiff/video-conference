@@ -1,5 +1,5 @@
 //*********** Start of code required when deploying ***********
-const socket = io('https://web-production-c7bec.up.railway.app');
+const socket = io('/');
 
 // const peer = new Peer()
 const peer = new Peer(undefined, { //me
