@@ -36,6 +36,11 @@ const nodemailer = require("nodemailer")
 const cors = require('cors');
 const cron = require('node-cron');
 
+
+// Serve static files from the 'public' directory
+app.use('/static', express.static(path.join(__dirname, 'public')));
+
+
 const uri = 'mongodb+srv://sparsh123:sparsh123@cluster0.sxbyain.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(uri, {
   useNewUrlParser: true,
@@ -54,6 +59,7 @@ Schema.once('open', function() {
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
 app.use(express.static('static'));
 app.use('/peerjs', peerServer);
 app.set('view engine', 'ejs');
