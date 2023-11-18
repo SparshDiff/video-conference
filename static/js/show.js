@@ -1,5 +1,7 @@
 //Audience side's js
 
+const { default: Peer } = require("peerjs");
+
 
 //*********** Start of code required when deploying ***********
 // const socket = io('/')
