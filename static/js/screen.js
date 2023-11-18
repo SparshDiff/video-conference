@@ -4,7 +4,7 @@
 
 
 //*********** Start of code required when deploying ***********
-const socket = io('/')
+const socket = io('https://web-production-c7bec.up.railway.app');
 
 const peer = new Peer(undefined, { //me
   path: '/peerjs', //from index.js
@@ -35,7 +35,7 @@ myVideo.muted = true; //so that we don't hear us
 let myVideoStream;
 let ctr = 0;
 
-peer.on('open', function(userId) { //generates my id
+peer.on('open', function (userId) { //generates my id
   myUserId = userId;
   socket.emit('display', MeetId, userId);
 })
@@ -62,14 +62,14 @@ navigator.mediaDevices.getDisplayMedia({
   videoGrid.append(package)
   addVideoStream(myVideo, stream, myUserId)
 
-  peer.on('call', function(call) { //set listeners when somebody calls u
+  peer.on('call', function (call) { //set listeners when somebody calls u
     call.answer(stream);
     console.log(call)
-    call.on('stream', function(userVideoStream) {
+    call.on('stream', function (userVideoStream) {
     })
   })
 
-  socket.on('display', function(userId) {
+  socket.on('display', function (userId) {
     connectToNewUser(userId, stream)
   })
   socket.emit('startdisplay', myUserId, '')
@@ -77,7 +77,7 @@ navigator.mediaDevices.getDisplayMedia({
 })
 function connectToNewUser(userId, stream) {
   const call = peer.call(userId, stream)
-  call.on('stream', function(userVideoStream) {
+  call.on('stream', function (userVideoStream) {
   })
   call.on('close', () => {
   })
@@ -86,13 +86,13 @@ function connectToNewUser(userId, stream) {
 
 function addVideoStream(video, stream, id) {
   video.srcObject = stream
-  video.addEventListener('loadedmetadata', function() {
+  video.addEventListener('loadedmetadata', function () {
     video.play()
   })
   video.classList.add('display-video')
 }
 
-socket.on('leavemeet', function(userId) {
+socket.on('leavemeet', function (userId) {
   var x = document.getElementById(userId);
   if (x)
     x.remove()
@@ -100,7 +100,7 @@ socket.on('leavemeet', function(userId) {
 })
 
 let text = $("input");
-$('html').keydown(function(e) {
+$('html').keydown(function (e) {
   if (e.which == 13 && text.val().length !== 0) {
     socket.emit('message', text.val(), myUserId, UserName);
     text.val('')
