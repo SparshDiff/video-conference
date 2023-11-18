@@ -2,23 +2,23 @@
 
 
 //*********** Start of code required when deploying ***********
-// const socket = io('/')
-
-// const peer = new Peer(undefined, { //me
-//   path: '/peerjs', //from index.js
-//   host: 'engage-keep-in-touch.herokuapp.com',
-//   port: '443'
-// })
-//*********** End of code required when deploying ***********
-
-//*********** Start of code required when running on localhost ***********
-const socket = io("https://web-production-c7bec.up.railway.app/");
+const socket = io('/')
 
 const peer = new Peer(undefined, { //me
   path: '/peerjs', //from index.js
-  host: '/',
-  port: '3000'
+  host: 'https://web-production-c7bec.up.railway.app/',
+  port: '443'
 })
+//*********** End of code required when deploying ***********
+
+//*********** Start of code required when running on localhost ***********
+// const socket = io("https://web-production-c7bec.up.railway.app/");
+
+// const peer = new Peer(undefined, { //me
+//   path: '/peerjs', //from index.js
+//   host: '/',
+//   port: '3000'
+// })
 //*********** End of code required when running on localhost ***********
 
 const peers = {}
