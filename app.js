@@ -20,6 +20,7 @@ const server = require('http').Server(app); //Because we want to reuse the HTTP 
 const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 const {
   v4: uuidV4
 } = require('uuid');
