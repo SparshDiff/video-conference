@@ -4,7 +4,7 @@ const socket = io('/')
 // const peer = new Peer()
 const peer = new Peer(undefined, { //me
   path: '/peerjs', //from index.js
-  host: 'https://web-production-c7bec.up.railway.app/',
+  host: '/',
   port: '443'
 })
 //*********** End of code required when deploying ***********
