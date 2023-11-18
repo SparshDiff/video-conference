@@ -1,6 +1,6 @@
 //Screen sharing person side's js
 
-const { default: Peer } = require("peerjs");
+// const { default: Peer } = require("peerjs");
 
 
 //*********** Start of code required when deploying ***********
@@ -14,7 +14,7 @@ const { default: Peer } = require("peerjs");
 
 const socket = io('/')
 
-const peer = new Peer()
+const peer = new peer()
 //*********** End of code required when deploying ***********
 
 //*********** Start of code required when running on localhost ***********

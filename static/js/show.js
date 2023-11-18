@@ -1,6 +1,6 @@
 //Audience side's js
 
-const { default: Peer } = require("peerjs");
+// const { default: Peer } = require("peerjs");
 
 
 //*********** Start of code required when deploying ***********
@@ -14,7 +14,7 @@ const { default: Peer } = require("peerjs");
 //*********** End of code required when deploying ***********
 const socket = io('/')
 
-const peer = new Peer()
+const peer = new peer()
 //*********** Start of code required when running on localhost ***********
 // const socket = io("https://web-production-c7bec.up.railway.app/");
 
