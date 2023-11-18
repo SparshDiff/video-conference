@@ -1,7 +1,7 @@
 //*********** Start of code required when deploying ***********
 const socket = io('/')
 
-const peer = new peer()
+const peer = new Peer()
 //*********** End of code required when deploying ***********
 
 //*********** Start of code required when running on localhost ***********
