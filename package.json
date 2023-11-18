@@ -7,15 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sreebasu05/keep-in-touch.git"
-  },
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sreebasu05/keep-in-touch/issues"
-  },
-  "homepage": "https://github.com/sreebasu05/keep-in-touch#readme",
   "dependencies": {
     "aos": "^3.0.0-beta.6",
     "bcryptjs": "^2.4.3",

@@ -263,8 +263,8 @@ socket.on('muteOthers', function (userId, userName) {
 
 // 6. Screensharing Feature
 function screenShare() {
-  window.open('http://localhost:3000/share/' + MeetId)
-  // window.open('https://engage-keep-in-touch.herokuapp.com/share/' + MeetId)
+  // window.open('http://localhost:3000/share/' + MeetId)
+  window.open('https://web-production-c7bec.up.railway.app/share/' + MeetId)
   socket.emit('startdisplay', myUserId, UserName)
 }
 socket.on('startdisplay', function (userId, userName) {
@@ -273,14 +273,14 @@ socket.on('startdisplay', function (userId, userName) {
   link.innerHTML = "<a onclick='display();'>Click here to watch " + userName + "'s screen.</a>"
 })
 function display() {
-  window.open('http://localhost:3000/display/' + MeetId)
-  // window.open('https://engage-keep-in-touch.herokuapp.com/display/'+ MeetId)
+  // window.open('http://localhost:3000/display/' + MeetId)
+  window.open('https://web-production-c7bec.up.railway.app/display/'+ MeetId)
 }
 
 // 7. Collab feature
 function whiteboard() {
-  window.open('http://localhost:3000/whiteboard/' + MeetId)
-  // window.open('https://engage-keep-in-touch.herokuapp.com/whiteboard/' + MeetId)
+  // window.open('http://localhost:3000/whiteboard/' + MeetId)
+  window.open('https://web-production-c7bec.up.railway.app/whiteboard/' + MeetId)
 }
 
 // Chat and Participants Display Handlers
