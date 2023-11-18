@@ -1,13 +1,13 @@
 //*********** Start of code required when deploying ***********
 const socket = io('/');
 
-// const peer = new Peer()
-const peer = new Peer(undefined, { //me
-  path: '/peerjs', //from index.js
-  // host: '/',
-  host: 'web-production-c7bec.up.railway.app',
-  port: '443'
-})
+const peer = new Peer()
+// const peer = new Peer(undefined, { //me
+//   path: '/peerjs', //from index.js
+//   // host: '/',
+//   host: 'web-production-c7bec.up.railway.app',
+//   port: '443'
+// })
 //*********** End of code required when deploying ***********
 
 //*********** Start of code required when running on localhost ***********
