@@ -1,11 +1,7 @@
 //*********** Start of code required when deploying ***********
 const socket = io('/')
 
-const peer = new Peer(undefined, { //me
-  path: '/peerjs', //from index.js
-  host: 'https://web-production-c7bec.up.railway.app/',
-  port: '3000'
-})
+const peer = new Peer()
 //*********** End of code required when deploying ***********
 
 //*********** Start of code required when running on localhost ***********
@@ -25,13 +21,13 @@ let myVideo = document.createElement('video')
 myVideo.muted = true; //so that we don't hear us
 let myVideoStream;
 
-peer.on('open', function(userId) { //generates my id
+peer.on('open', function (userId) { //generates my id
   socket.emit('entermeet', MeetId, userId, UserName);
   myUserId = userId;
   socket.emit('ourname', myUserId, UserName);
 
 })
-socket.on('ourname', function(userId, userName) { //Gets the name of new joined users
+socket.on('ourname', function (userId, userName) { //Gets the name of new joined users
   users.add(userId)     //users & usernames is declared in meet.ejs
   usernames.set(userId, {
     name: userName
@@ -44,7 +40,7 @@ let overlayWidth, overlayHeight
 
 
 //This socket listens if any user leaves the room and reorients the grid accordingly
-socket.on('leavemeet', function(userId, userName) {
+socket.on('leavemeet', function (userId, userName) {
   users.delete(userId)
   var x = $("#" + userId);
   if (x) {
@@ -60,7 +56,7 @@ socket.on('leavemeet', function(userId, userName) {
 //This function adds the video streams
 function addVideoStream(video, stream, id) {
   video.srcObject = stream
-  video.addEventListener('loadedmetadata', function() {
+  video.addEventListener('loadedmetadata', function () {
     video.play()
   })
 
@@ -68,9 +64,9 @@ function addVideoStream(video, stream, id) {
   checkVideo()
   let me = document.getElementById(id);
   me.classList.remove("raise");
-  do{
-  me.getElementsByTagName('h5')[0].innerHTML = usernames.get(id).name
-  }while(usernames.get(id)==undefined)
+  do {
+    me.getElementsByTagName('h5')[0].innerHTML = usernames.get(id).name
+  } while (usernames.get(id) == undefined)
   let audio = document.getElementById('audio')
   audio.play()
 
@@ -118,7 +114,7 @@ function checkVideo() {
 //*********** Start of code for handling features ***********
 // 1. Chat Feature
 let text = $("#chat-message");
-$('html').keydown(function(e) {
+$('html').keydown(function (e) {
   if (e.which == 13) {
     if (text.val().length !== 0) {
       socket.emit('message', text.val(), myUserId, UserName);
@@ -126,7 +122,7 @@ $('html').keydown(function(e) {
     }
   }
 });
-socket.on("message", function(message, userId, userName) {
+socket.on("message", function (message, userId, userName) {
 
   if (myUserId == userId)
     $(".notifications").append(`<li class="message user-message"><small><b>You</b></small><br/>${message}</li>`);
@@ -165,9 +161,9 @@ function videoStop() {
     socket.emit('startvideo', myUserId, UserName)
   }
 }
-socket.on('stopvideo', function(userId, userName) {
-  if(userId==myUserId){
-    userId="undefined"
+socket.on('stopvideo', function (userId, userName) {
+  if (userId == myUserId) {
+    userId = "undefined"
   }
   userName += ' '
   let me = document.getElementById(userId);
@@ -178,8 +174,8 @@ socket.on('stopvideo', function(userId, userName) {
   for (let i = 0; i < initials.length; i++) {
     if (/^[a-zA-Z()]$/.test(initials[i][0]))
       des.innerHTML += initials[i][0].toUpperCase();
-    else if(initials[i][0]){
-      des.innerHTML+=initials[i][0]
+    else if (initials[i][0]) {
+      des.innerHTML += initials[i][0]
     }
   }
   des.classList.add('overlay')
@@ -189,9 +185,9 @@ socket.on('stopvideo', function(userId, userName) {
     x[i].style.bottom = overlayBottom;
   }
 })
-socket.on('startvideo', function(userId, userName) {
-  if(userId==myUserId){
-    userId="undefined"
+socket.on('startvideo', function (userId, userName) {
+  if (userId == myUserId) {
+    userId = "undefined"
   }
   let me = document.getElementById(userId).getElementsByTagName('h1');
   if (me[0]) {
@@ -239,17 +235,17 @@ function raiseHand() {
     socket.emit('lowerHand', myUserId, UserName)
   }
 }
-socket.on('raiseHand', function(userId, userName) {
-  if(userId==myUserId){
-    userId="undefined"
+socket.on('raiseHand', function (userId, userName) {
+  if (userId == myUserId) {
+    userId = "undefined"
   }
   let me = document.getElementById(userId);
   me.classList.add("raise");
-  me.getElementsByTagName('h5')[0].innerHTML = userName+'&#x270B '
+  me.getElementsByTagName('h5')[0].innerHTML = userName + '&#x270B '
 })
-socket.on('lowerHand', function(userId, userName) {
-  if(userId==myUserId){
-    userId="undefined"
+socket.on('lowerHand', function (userId, userName) {
+  if (userId == myUserId) {
+    userId = "undefined"
   }
   let me = document.getElementById(userId);
   me.classList.remove("raise");
@@ -260,7 +256,7 @@ socket.on('lowerHand', function(userId, userName) {
 function muteOthers() {
   socket.emit('muteOthers', myUserId, UserName)
 }
-socket.on('muteOthers', function(userId, userName) {
+socket.on('muteOthers', function (userId, userName) {
   if (myUserId != userId && Audio == true)
     audioStop();
 })
@@ -271,12 +267,12 @@ function screenShare() {
   // window.open('https://engage-keep-in-touch.herokuapp.com/share/' + MeetId)
   socket.emit('startdisplay', myUserId, UserName)
 }
-socket.on('startdisplay', function(userId, userName) {
+socket.on('startdisplay', function (userId, userName) {
   let link = document.getElementById('link');
 
-  link.innerHTML="<a onclick='display();'>Click here to watch "+userName+"'s screen.</a>"
+  link.innerHTML = "<a onclick='display();'>Click here to watch " + userName + "'s screen.</a>"
 })
-function display(){
+function display() {
   window.open('http://localhost:3000/display/' + MeetId)
   // window.open('https://engage-keep-in-touch.herokuapp.com/display/'+ MeetId)
 }
@@ -311,7 +307,7 @@ function sendmessage() {
   scrollToBottom()
 }
 //On clicking on the participant list or chat part of the screen it hides them
-document.getElementsByClassName('media-left')[0].addEventListener("click", function() {
+document.getElementsByClassName('media-left')[0].addEventListener("click", function () {
   let x = document.getElementById('chat');
   x.style.flex = 0;
   x = document.getElementById('participants');
@@ -344,7 +340,7 @@ navigator.mediaDevices.getUserMedia({
   const videoGrid = $('#video-grid').append(package)
 
   //This socket listens to the entering of new users and connect them.
-  socket.on('entermeet', function(userId, userName) {
+  socket.on('entermeet', function (userId, userName) {
     //Shares our name with all other users
     socket.emit('ourname', myUserId, UserName);
 
@@ -362,7 +358,7 @@ navigator.mediaDevices.getUserMedia({
 
   addVideoStream(myVideo, stream, myUserId)
 
-  peer.on('call', function(call) { //set listeners when somebody calls u
+  peer.on('call', function (call) { //set listeners when somebody calls u
     call.answer(stream)            //this sends our stream to the caller
 
     //package element contains everything of a single user, i.e video, id, name and overlays
@@ -378,7 +374,7 @@ navigator.mediaDevices.getUserMedia({
 
     const videoGrid = $('#video-grid').append(package)
 
-    call.on('stream', function(userVideoStream) {
+    call.on('stream', function (userVideoStream) {
       addVideoStream(video, userVideoStream, call.peer)
     })
   })
@@ -400,7 +396,7 @@ navigator.mediaDevices.getUserMedia({
     let videoGrid = document.getElementById('video-grid')
     videoGrid.append(package)
 
-    call.on('stream', function(userVideoStream) {
+    call.on('stream', function (userVideoStream) {
       console.log(userVideoStream);
       addVideoStream(video, userVideoStream, call.peer)
     })
