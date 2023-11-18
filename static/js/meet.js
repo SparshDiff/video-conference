@@ -4,7 +4,8 @@ const socket = io('/')
 // const peer = new Peer()
 const peer = new Peer(undefined, { //me
   path: '/peerjs', //from index.js
-  host: '/',
+  // host: '/',
+  host: 'web-production-c7bec.up.railway.app',
   port: '443'
 })
 //*********** End of code required when deploying ***********
@@ -279,7 +280,7 @@ socket.on('startdisplay', function (userId, userName) {
 })
 function display() {
   // window.open('http://localhost:3000/display/' + MeetId)
-  window.open('https://web-production-c7bec.up.railway.app/display/'+ MeetId)
+  window.open('https://web-production-c7bec.up.railway.app/display/' + MeetId)
 }
 
 // 7. Collab feature
