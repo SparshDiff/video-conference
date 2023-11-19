@@ -1,9 +1,9 @@
-<h1 align="center"><b>Keep-In-Touch</b></h1>
+<h1 align="center"><b>Let's Meet</b></h1>
 <p align="center">
 </p>
 
 ## Introduction:
-  Keep-In-Touch which is a web development project that is designed and developed by Sreemoyee Basu for Microsoft Engage through which two or more people can have a video conversation and much more.
+  Let's Meet which is a web development project that is designed and developed through which two or more people can have a video conversation and much more.
 
 
 ## Table of Contents:
