@@ -42,7 +42,7 @@ const cron = require('node-cron');
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
 
-const uri = 'mongodb+srv://sparsh123:sparsh123@cluster0.sxbyain.mongodb.net/?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://smartsparsh04:ky0BEhKfRNAxzVAK@cluster0.vscgxuk.mongodb.net/?retryWrites=true&w=majority';
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -53,7 +53,7 @@ const store = new mongoDbSession({
   collection: "sessions"
 })
 const Schema = mongoose.connection;
-Schema.once('open', function() {
+Schema.once('open', function () {
   console.log('Database Connected!')
 });
 
@@ -170,7 +170,7 @@ const Group = mongoose.model("Group", GroupSchema);
 // -----------------------------USER AUTH-------------------------------
 // ---------------------------------------------------------------------
 // Function to check if user is logged in or not
-const isAuth = function(req, res, next) {
+const isAuth = function (req, res, next) {
   if (req.session.isAuth) {
     next()
   } else {
@@ -212,7 +212,7 @@ function mail(from, to, meet, type) {
     html: message
   };
 
-  mailTransporter.sendMail(mailDetails, function(err, data) {
+  mailTransporter.sendMail(mailDetails, function (err, data) {
     if (err) {
       console.log(err);
     }
@@ -223,7 +223,7 @@ function mail(from, to, meet, type) {
 // -----------------------------GET ROUTES------------------------------
 // ---------------------------------------------------------------------
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   req.session.error = '';
   res.render('home', {
     isAuth: req.session.isAuth,
@@ -232,11 +232,11 @@ app.get('/', function(req, res) {
 });
 
 // ${uuidV4} generates an uuid.
-app.get('/hostmeet', function(req, res) {
+app.get('/hostmeet', function (req, res) {
   req.session.error = '';
   res.redirect(`/hostmeet/${uuidV4()}`);
 });
-app.get('/hostmeet/:meet', function(req, res) {
+app.get('/hostmeet/:meet', function (req, res) {
   if (uuidValidate(req.params.meet)) { //validates if used a proper uuidV4
     req.session.error = '';
     res.render('hostmeet', {
@@ -250,7 +250,7 @@ app.get('/hostmeet/:meet', function(req, res) {
   }
 })
 
-app.get('/joinmeet', function(req, res) {
+app.get('/joinmeet', function (req, res) {
   req.session.error = '';
   res.render('joinmeet', {
     isAuth: req.session.isAuth,
@@ -259,7 +259,7 @@ app.get('/joinmeet', function(req, res) {
   });
 })
 
-app.get('/whiteboard/:meet', function(req, res) {
+app.get('/whiteboard/:meet', function (req, res) {
   res.render('whiteboard', {
     meetId: req.params.meet,
     isAuth: req.session.isAuth,
@@ -268,14 +268,14 @@ app.get('/whiteboard/:meet', function(req, res) {
 })
 
 // Screen sharing routes one for the person sharing and other for the audience
-app.get('/share/:meet', function(req, res) {
+app.get('/share/:meet', function (req, res) {
   res.render('sharescreen', {
     title: "Screen | ",
     meetId: req.params.meet,
     isAuth: req.session.isAuth,
   });
 })
-app.get('/display/:meet', function(req, res) {
+app.get('/display/:meet', function (req, res) {
   res.render('displayscreen', {
     meetId: req.params.meet,
     isAuth: req.session.isAuth,
@@ -283,7 +283,7 @@ app.get('/display/:meet', function(req, res) {
   });
 })
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
   if (req.session.isAuth) { //if user is already logged in redirects to the dashboard
     req.session.error = '';
     res.redirect('/dashboard')
@@ -295,7 +295,7 @@ app.get('/login', function(req, res) {
     });
   }
 })
-app.get('/signup', function(req, res) {
+app.get('/signup', function (req, res) {
   if (req.session.isAuth) { //if user is already logged in redirects to the dashboard
     req.session.error = '';
     res.redirect('/dashboard')
@@ -309,7 +309,7 @@ app.get('/signup', function(req, res) {
 })
 
 //This is the room route for signed up users as these meets have a title and require stored chats
-app.get('/meet/:meet/:title', isAuth, function(req, res) {
+app.get('/meet/:meet/:title', isAuth, function (req, res) {
   let meetId = req.params.meet
   let title = req.params.title + " | "
   let user = req.session.user
@@ -318,7 +318,7 @@ app.get('/meet/:meet/:title', isAuth, function(req, res) {
   //'Not' checking if the user is part of the group to allow other logged in users to the meet
   User.findOne({
     _id: user
-  }, function(err, foundUser) {
+  }, function (err, foundUser) {
     if (err) {
       req.session.destroy((err) => {
         res.render('login', {
@@ -330,7 +330,7 @@ app.get('/meet/:meet/:title', isAuth, function(req, res) {
     } else {
       Meet.findOne({
         _id: meetId
-      }).populate('chats').exec(function(err, meet) { //Fetches chats
+      }).populate('chats').exec(function (err, meet) { //Fetches chats
         if (err) {
           res.redirect('/dashboard');
         } else {
@@ -349,17 +349,17 @@ app.get('/meet/:meet/:title', isAuth, function(req, res) {
     }
   })
 })
-app.get('/hangup', function(req, res) {
+app.get('/hangup', function (req, res) {
   if (req.session.user) { //If logged in redirects to dashboard
     res.redirect('/dashboard')
   } else { //Else to the join page
     res.redirect('/joinmeet')
   }
 })
-app.get('/dashboard', isAuth, function(req, res) {
+app.get('/dashboard', isAuth, function (req, res) {
   User.findOne({ // Fetches all groups this user is a part of
     _id: req.session.user
-  }).populate('groups').exec(function(err, user) {
+  }).populate('groups').exec(function (err, user) {
     if (err) {
       res.render('login', {
         isAuth: req.session.isAuth,
@@ -383,11 +383,11 @@ app.get('/dashboard', isAuth, function(req, res) {
   })
 
 })
-app.get('/dashboard/:group', isAuth, async function(req, res) { //Group's Dashboard
+app.get('/dashboard/:group', isAuth, async function (req, res) { //Group's Dashboard
   let groups = [];
   let members = await User.find({ //fetches members of this group
     groups: req.params.group
-  }, function(err, members) {
+  }, function (err, members) {
     if (!members) {
       req.session.error = "Group doesn't exists!"
       return res.redirect('/dashboard');
@@ -398,7 +398,7 @@ app.get('/dashboard/:group', isAuth, async function(req, res) { //Group's Dashbo
   User.findOne({ // Fetches all groups this user is a part of
     _id: req.session.user,
     groups: req.params.group
-  }).populate('groups').exec(function(err, user) { //Fetches groups of this user
+  }).populate('groups').exec(function (err, user) { //Fetches groups of this user
     if (!user) { //If user is accessing this group wrongfully
       req.session.error = 'Your are not part of this group!'
       return res.redirect('/dashboard');
@@ -406,7 +406,7 @@ app.get('/dashboard/:group', isAuth, async function(req, res) { //Group's Dashbo
       groups = user.groups;
       Group.findOne({ //Fetches all the meets of this particular group
         _id: req.params.group
-      }).populate('meets').exec(function(err, group) {
+      }).populate('meets').exec(function (err, group) {
         if (err || !group) {
           res.redirect('/dashboard');
         } else {
@@ -427,11 +427,11 @@ app.get('/dashboard/:group', isAuth, async function(req, res) { //Group's Dashbo
     }
   });
 })
-app.get('/chat/:group/:meet', isAuth, function(req, res) { //Chat page of a meet
+app.get('/chat/:group/:meet', isAuth, function (req, res) { //Chat page of a meet
   User.findOne({
     _id: req.session.user,
     groups: req.params.group
-  }).populate('groups').exec(function(err, user) {
+  }).populate('groups').exec(function (err, user) {
     if (!user) { //If the user is accessing a group wrongfully
       req.session.error = "You are not part of this group!"
       return res.redirect('/dashboard');
@@ -440,7 +440,7 @@ app.get('/chat/:group/:meet', isAuth, function(req, res) { //Chat page of a meet
       userName = user.username;
       Meet.findOne({ //Checks if the meet exists
         _id: req.params.meet
-      }).populate('chats').exec(function(err, meet) {
+      }).populate('chats').exec(function (err, meet) {
         if (err) {
           req.session.error = "Meet does not exist!"
           res.redirect('/dashboard');
@@ -460,10 +460,10 @@ app.get('/chat/:group/:meet', isAuth, function(req, res) { //Chat page of a meet
     }
   })
 })
-app.get('/reminder/:group/:meet', isAuth, async function(req, res) { //reminder route
+app.get('/reminder/:group/:meet', isAuth, async function (req, res) { //reminder route
   let meet = await Meet.findOne({ //Checks if the meetid is proper
     _id: req.params.meet
-  }, function(err, meet) {
+  }, function (err, meet) {
     if (!meet) {
       req.session.error = "Meet does not exist!"
       return res.redirect("/dashboard/" + req.params.group);
@@ -473,7 +473,7 @@ app.get('/reminder/:group/:meet', isAuth, async function(req, res) { //reminder 
   let user = await User.findOne({ //Checks if the user is the part of this meet
     _id: req.session.user,
     groups: req.params.group
-  }, function(err, meet) {
+  }, function (err, meet) {
     if (!meet) {
       req.session.error = "You are not part of this group!"
       return res.redirect('/dashboard');
@@ -481,9 +481,9 @@ app.get('/reminder/:group/:meet', isAuth, async function(req, res) { //reminder 
   })
   User.find({ //Finds all users of this group
     groups: req.params.group
-  }, function(err, members) {
+  }, function (err, members) {
 
-    members.forEach(function(member) { //Mails each one of them
+    members.forEach(function (member) { //Mails each one of them
       mail(user, member, meet, "reminder")
     })
 
@@ -492,14 +492,14 @@ app.get('/reminder/:group/:meet', isAuth, async function(req, res) { //reminder 
 
 })
 
-app.get('/group', isAuth, function(req, res) { //Group creating route
+app.get('/group', isAuth, function (req, res) { //Group creating route
   res.render('creategroup', {
     isAuth: req.session.isAuth,
     message: '',
     title: "Create Group | "
   })
 })
-app.get('/joingroup', isAuth, function(req, res) { //Group joining route
+app.get('/joingroup', isAuth, function (req, res) { //Group joining route
   res.render('joingroup', {
     isAuth: req.session.isAuth,
     message: '',
@@ -507,17 +507,17 @@ app.get('/joingroup', isAuth, function(req, res) { //Group joining route
   })
 })
 
-app.get("/leave/:group", isAuth, function(req, res) { //Group leaving route
+app.get("/leave/:group", isAuth, function (req, res) { //Group leaving route
   const group = req.params.group;
   const user = req.session.user;
   User.findOneAndUpdate({
-      _id: user
-    }, {
-      $pull: {
-        groups: group
-      }
-    },
-    function(err, foundList) {
+    _id: user
+  }, {
+    $pull: {
+      groups: group
+    }
+  },
+    function (err, foundList) {
       if (!err) {
         res.redirect("/dashboard");
       } else {
@@ -532,11 +532,11 @@ app.get("/leave/:group", isAuth, function(req, res) { //Group leaving route
     });
 });
 
-app.get('/createmeet/:group', isAuth, async function(req, res) { //Meet creating route
+app.get('/createmeet/:group', isAuth, async function (req, res) { //Meet creating route
   let user = await User.findOne({ //Checks if the user is part of this group
     _id: req.session.user,
     groups: req.params.group
-  }, function(err, user) {
+  }, function (err, user) {
     if (!user) {
       req.session.error = "You are not part of this group!"
       return res.redirect('/dashboard');
@@ -552,10 +552,10 @@ app.get('/createmeet/:group', isAuth, async function(req, res) { //Meet creating
   });
 
 })
-app.get('/cancelmeet/:group/:meet', isAuth, async function(req, res) { //Cancels meet
+app.get('/cancelmeet/:group/:meet', isAuth, async function (req, res) { //Cancels meet
   let meet = await Meet.findOne({ //Checks if the meet exists
     _id: req.params.meet
-  }, function(err, meet) {
+  }, function (err, meet) {
     if (!meet) {
       req.session.error = "Meet does not exist!"
       return res.redirect("/dashboard/" + req.params.group);
@@ -565,7 +565,7 @@ app.get('/cancelmeet/:group/:meet', isAuth, async function(req, res) { //Cancels
   let user = await User.findOne({ //Checks if the user is part of this group
     _id: req.session.user,
     groups: req.params.group
-  }, function(err, user) {
+  }, function (err, user) {
     if (!user) {
       req.session.error = "You are not part of this group!"
       return res.redirect('/dashboard');
@@ -578,12 +578,12 @@ app.get('/cancelmeet/:group/:meet', isAuth, async function(req, res) { //Cancels
     $set: {
       status: 1
     }
-  }, function(err, foundMeet) {
+  }, function (err, foundMeet) {
     if (!err) {
       User.find({
         groups: req.params.group
-      }, function(err, users) {
-        users.forEach(function(subuser) {
+      }, function (err, users) {
+        users.forEach(function (subuser) {
           mail(user, subuser, meet, "cancel")
         })
         req.session.error = "";
@@ -592,10 +592,10 @@ app.get('/cancelmeet/:group/:meet', isAuth, async function(req, res) { //Cancels
     }
   })
 })
-app.get('/undomeet/:group/:meet', isAuth, async function(req, res) { //Undo cancel meet
+app.get('/undomeet/:group/:meet', isAuth, async function (req, res) { //Undo cancel meet
   let meet = await Meet.findOne({ //Checks if the meet exist
     _id: req.params.meet
-  }, function(err, meet) {
+  }, function (err, meet) {
     if (!meet) {
       req.session.error = "Meet does not exist!"
       return res.redirect("/dashboard/" + req.params.group);
@@ -605,7 +605,7 @@ app.get('/undomeet/:group/:meet', isAuth, async function(req, res) { //Undo canc
   let user = await User.findOne({ //Checks if the user is part of this meet
     _id: req.session.user,
     groups: req.params.group
-  }, function(err, user) {
+  }, function (err, user) {
     if (!user) {
       req.session.error = "You are not part of this group!"
       return res.redirect('/dashboard');
@@ -618,12 +618,12 @@ app.get('/undomeet/:group/:meet', isAuth, async function(req, res) { //Undo canc
     $set: {
       status: 0
     }
-  }, function(err, foundMeet) {
+  }, function (err, foundMeet) {
     if (!err) {
       User.find({
         groups: req.params.group
-      }, function(err, users) {
-        users.forEach(function(subuser) {
+      }, function (err, users) {
+        users.forEach(function (subuser) {
           mail(user, subuser, meet, "undocancel")
         })
         req.session.error = "";
@@ -633,20 +633,20 @@ app.get('/undomeet/:group/:meet', isAuth, async function(req, res) { //Undo canc
   })
 })
 
-app.get('/help', function(req, res) {
+app.get('/help', function (req, res) {
   res.render('help', {
     isAuth: req.session.isAuth,
     title: "Help | "
   })
 })
-app.get('/contactus', function(req, res) {
+app.get('/contactus', function (req, res) {
   res.render('contactus', {
     isAuth: req.session.isAuth,
     message: "",
     title: "Contact Us | "
   })
 })
-app.get('/logout', function(req, res) {
+app.get('/logout', function (req, res) {
   req.session.destroy((err) => {
     if (err) throw err;
     res.render('logout', {
@@ -660,7 +660,7 @@ app.get('/logout', function(req, res) {
 // ---------------------------------------------------------------------
 // -----------------------------POST ROUTES------------------------------
 // ---------------------------------------------------------------------
-app.post('/joinmeet', function(req, res) {
+app.post('/joinmeet', function (req, res) {
   let meetId = req.body.meetid;
   if (uuidValidate(meetId)) { //validates if used a proper uuidV4
     let userName = req.body.name;
@@ -698,7 +698,7 @@ app.post('/joinmeet', function(req, res) {
   }
   // res.redirect('/meet/' + meetId);
 })
-app.post('/hostmeet/:meet', function(req, res) {
+app.post('/hostmeet/:meet', function (req, res) {
   let meetId = req.params.meet;
   if (uuidValidate(meetId)) { //validates if used a proper uuidV4
     let userName = req.body.name;
@@ -732,13 +732,13 @@ app.post('/hostmeet/:meet', function(req, res) {
   }
 })
 
-app.post('/joingroup', isAuth, async function(req, res) {
+app.post('/joingroup', isAuth, async function (req, res) {
   let name = req.body.name;
   let key = req.body.key;
   let group = await Group.findOne({ //Checks if the entered data matches
     groupname: name,
     groupkey: key
-  }, function(err, group) {
+  }, function (err, group) {
     if (!group) {
       req.session.error = "";
       return res.render('joingroup', {
@@ -752,7 +752,7 @@ app.post('/joingroup', isAuth, async function(req, res) {
   let ispart = await User.findOne({ //If user is already part of the group
     _id: req.session.user,
     groups: group._id
-  }, function(err, ispart) {
+  }, function (err, ispart) {
     if (ispart) {
       req.session.error = "You are already in the group!";
       return res.redirect('/dashboard/' + group._id)
@@ -761,7 +761,7 @@ app.post('/joingroup', isAuth, async function(req, res) {
 
   User.findOne({ //Else adds it to his/her groups list
     _id: req.session.user,
-  }, function(err, foundUser) {
+  }, function (err, foundUser) {
     if (err) {
       return res.redirect('/joingroup');
     }
@@ -772,13 +772,13 @@ app.post('/joingroup', isAuth, async function(req, res) {
   })
 
 })
-app.post('/group', isAuth, function(req, res) {
+app.post('/group', isAuth, function (req, res) {
   let name = req.body.name;
   let key = req.body.key;
 
   Group.findOne({ //Checks if the groupname is already taken or not
     groupname: name
-  }, function(err, foundGroup) {
+  }, function (err, foundGroup) {
     if (foundGroup) {
       req.session.error = ""
       return res.render('creategroup', {
@@ -797,7 +797,7 @@ app.post('/group', isAuth, function(req, res) {
       } else {
         User.findOne({
           _id: req.session.user
-        }, function(err, foundUser) {
+        }, function (err, foundUser) {
           if (err) {
             req.session.error = "User logged out!"
             res.redirect('/login');
@@ -819,7 +819,7 @@ app.post('/group', isAuth, function(req, res) {
 
 })
 
-app.post('/createmeet/:group', isAuth, async function(req, res) {
+app.post('/createmeet/:group', isAuth, async function (req, res) {
   let groupid = req.params.group;
   let name = req.body.name;
   let details = req.body.details;
@@ -831,7 +831,7 @@ app.post('/createmeet/:group', isAuth, async function(req, res) {
   }
   let members = await User.find({ //Checks if there are any members
     groups: req.params.group
-  }, function(err, members) {
+  }, function (err, members) {
     if (!members) {
       req.session.error = "Group does not exist!";
       return res.redirect("/dashboard")
@@ -841,7 +841,7 @@ app.post('/createmeet/:group', isAuth, async function(req, res) {
 
   let group = await Group.findOne({ //Checks if the group exists
     _id: groupid
-  }, function(err, group) {
+  }, function (err, group) {
     if (!group) {
       req.session.error = "Group does not exist!";
       return res.redirect("/dashboard")
@@ -851,7 +851,7 @@ app.post('/createmeet/:group', isAuth, async function(req, res) {
   User.findOne({ //If the user is part of this group
     _id: req.session.user,
     groups: groupid
-  }).populate('groups').exec(function(err, user) {
+  }).populate('groups').exec(function (err, user) {
     if (!user) {
       return res.redirect('/dashboard' + groupid)
     } else if (err) {
@@ -873,7 +873,7 @@ app.post('/createmeet/:group', isAuth, async function(req, res) {
     group.meets.push(meet._id);
     group.save();
 
-    members.forEach(function(member) { //Sends an invite mail to each user
+    members.forEach(function (member) { //Sends an invite mail to each user
       mail(user, member, meet, "invite")
     })
     req.session.error = "New Meet Created!"
@@ -881,7 +881,7 @@ app.post('/createmeet/:group', isAuth, async function(req, res) {
   })
 
 })
-app.post('/contactus', function(req, res) {
+app.post('/contactus', function (req, res) {
   let mailTransporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -898,7 +898,7 @@ app.post('/contactus', function(req, res) {
     html: req.body.feedback
   };
 
-  mailTransporter.sendMail(mailDetails, function(err, data) {
+  mailTransporter.sendMail(mailDetails, function (err, data) {
     if (err) {
       console.log(err);
     }
@@ -910,7 +910,7 @@ app.post('/contactus', function(req, res) {
     title: "Contact Us | "
   })
 })
-app.post('/signup', async function(req, res) {
+app.post('/signup', async function (req, res) {
   let email = req.body.email;
   let username = req.body.username;
   let password = req.body.password;
@@ -953,12 +953,12 @@ app.post('/signup', async function(req, res) {
   req.session.error = "Welcome " + username + " !"
   res.redirect('/dashboard');
 })
-app.post('/login', async function(req, res) {
+app.post('/login', async function (req, res) {
   let email = req.body.email;
   let password = req.body.password;
   let user = await User.findOne({ //Checks if the user exists
     email: email
-  }, function(err, user) {
+  }, function (err, user) {
     if (!user) {
       req.session.error = "";
       return res.render("signup", {
@@ -991,10 +991,10 @@ app.post('/login', async function(req, res) {
 // ---------------------------------------------------------------------
 // All connections for the meet
 io.on('connection', socket => {
-  socket.on('entermeet', function(meetId, userId, userName) {
+  socket.on('entermeet', function (meetId, userId, userName) {
     socket.join(meetId); //join this meet
     socket.to(meetId).emit('entermeet', userId, userName);
-    socket.on('displayscreen', function(userId, display) {
+    socket.on('displayscreen', function (userId, display) {
       socket.to(meetId).emit('displayscreen', userId, display);
     })
     //To implement the chat feature
@@ -1006,7 +1006,7 @@ io.on('connection', socket => {
       chat.save()
       Meet.findOne({
         _id: meetId,
-      }, function(err, meet) {
+      }, function (err, meet) {
         if (!err) {
           meet.chats.push(chat._id)
           meet.save()
@@ -1015,59 +1015,59 @@ io.on('connection', socket => {
       io.to(meetId).emit('message', message, userId, userName)
     });
     //To stop a user's video from being shared
-    socket.on('stopvideo', function(userId, userName) {
+    socket.on('stopvideo', function (userId, userName) {
       io.to(meetId).emit('stopvideo', userId, userName);
     })
     //To share a user's video
-    socket.on('startvideo', function(userId, userName) {
+    socket.on('startvideo', function (userId, userName) {
       io.to(meetId).emit('startvideo', userId, userName);
     })
     //To share that user is raising their hand
-    socket.on('raiseHand', function(userId, userName) {
+    socket.on('raiseHand', function (userId, userName) {
       io.to(meetId).emit('raiseHand', userId, userName);
     })
     //To stop sharing that user is raising their hand
-    socket.on('lowerHand', function(userId, userName) {
+    socket.on('lowerHand', function (userId, userName) {
       io.to(meetId).emit('lowerHand', userId, userName);
     })
     //To mute all users except the one called for this
-    socket.on('muteOthers', function(userId, userName) {
+    socket.on('muteOthers', function (userId, userName) {
       io.to(meetId).emit('muteOthers', userId, userName);
     })
 
-    socket.on('screenshare', function(userId, userName) {
+    socket.on('screenshare', function (userId, userName) {
       io.to(meetId).emit('screenshare', userId, userName);
     })
     //To notify that a user is sharing screen
-    socket.on('startdisplay', function(userId, userName) {
+    socket.on('startdisplay', function (userId, userName) {
       io.to(meetId).emit('startdisplay', userId, userName);
     })
     //To share name and get name of all users
-    socket.on('ourname', function(userId, userName) {
+    socket.on('ourname', function (userId, userName) {
       io.to(meetId).emit('ourname', userId, userName);
     })
     //Shares that a user has disconnected
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function () {
       socket.to(meetId).emit('leavemeet', userId, userName)
     })
   });
 })
 // All connectios for the drawing meet
 io.on('connection', socket => {
-  socket.on('enter', function(meetId) {
+  socket.on('enter', function (meetId) {
     socket.join(meetId)
     socket.to(meetId).emit('enter');
-    socket.on('drawing', function(data) {
+    socket.on('drawing', function (data) {
       io.to(meetId).emit('drawing', data);
     })
-    socket.on('refresh', function() {
+    socket.on('refresh', function () {
       io.to(meetId).emit('refresh');
     })
   })
 });
 // All Connections for the screensharing meet
 io.on('connection', socket => {
-  socket.on('display', function(meetId, userId, userName) { //Second
+  socket.on('display', function (meetId, userId, userName) { //Second
     socket.join(meetId); //join this meet
     socket.to(meetId).emit('display', userId, userName);
   });
@@ -1079,7 +1079,7 @@ io.on('connection', socket => {
 // ---------------------------------------------------------------------
 // This cron scheduler checks every minute if any meet is starting and send a
 // reminder mail to the users.
-cron.schedule('*/1 * * * *', function() {
+cron.schedule('*/1 * * * *', function () {
   let today = new Date()
   let todayOffset = today.getTimezoneOffset();
   let ISTOffset = 330;
@@ -1090,10 +1090,10 @@ cron.schedule('*/1 * * * *', function() {
   let meets = Meet.find({ //This finds every meet which are yet to begin and are not cancelled
     reminder: 0,
     status: 0
-  }, function(err, meets) {
+  }, function (err, meets) {
     if (err)
       return;
-    meets.forEach(function(meet) {
+    meets.forEach(function (meet) {
       // For each meet we check if it's scheduled now, if yes we update
       // the reminder to 1 that means the meeting has begun and we remind all
       // members of that group about the meeting.
@@ -1105,14 +1105,14 @@ cron.schedule('*/1 * * * *', function() {
           $set: {
             reminder: 1
           }
-        }, function(err, m) {
+        }, function (err, m) {
           Group.findOne({
             meets: meet._id
-          }, function(err, group) {
+          }, function (err, group) {
             User.find({
               groups: group._id
-            }, function(err, users) {
-              users.forEach(function(user) {
+            }, function (err, users) {
+              users.forEach(function (user) {
                 mail('', user, meet, "reminder")
               })
             })
@@ -1123,6 +1123,6 @@ cron.schedule('*/1 * * * *', function() {
   });
 })
 
-server.listen(process.env.PORT || 3000, function() {
+server.listen(process.env.PORT || 3000, function () {
   console.log('Server started at port 3000')
 })
