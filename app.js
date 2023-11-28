@@ -192,7 +192,7 @@ function mail(from, to, meet, type) {
     port: 465,
     secure: true, // use TLS
     auth: {
-      user: 'engagekeepintouch@gmail.com',
+      user: '20ucs199@lnmiit.ac.in',
       pass: process.env.PASSWORD
     }
   });
